@@ -57,7 +57,7 @@ export interface PhotoMetadata {
 export interface EditHistoryEntry {
   id: string;
   timestamp: Date;
-  operation: 'swap_photos' | 'change_layout' | 'reorder_pages' | 'delete_page' | 'add_page';
+  operation: 'swap_photos' | 'change_layout' | 'reorder_pages' | 'delete_page' | 'add_page' | 'move_photo_cross_page';
   pageIndex?: number;
   details: any;
 }

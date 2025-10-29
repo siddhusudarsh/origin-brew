@@ -14,6 +14,7 @@ import {
   duplicatePage,
   deletePage,
   reorderPages,
+  movePhotoWithLayoutAdjustment,
 } from '@/lib/editOperations';
 import { regeneratePages } from '@/lib/pageRegenerator';
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
@@ -30,6 +31,9 @@ interface EditModeProps {
   onCurrentPageChange: (page: number) => void;
   onSave: (pages: AlbumPage[]) => void;
   onCancel: () => void;
+  viewMode: 'single' | 'book';
+  onDragStart: (event: DragStartEvent) => void;
+  onDragEnd: (event: DragEndEvent) => void;
 }
 
 export default function EditMode({
@@ -40,6 +44,9 @@ export default function EditMode({
   onCurrentPageChange,
   onSave,
   onCancel,
+  viewMode,
+  onDragStart: parentOnDragStart,
+  onDragEnd: parentOnDragEnd,
 }: EditModeProps) {
   const [workingPages, setWorkingPages] = useState(pages);
   const [layoutSelectorOpen, setLayoutSelectorOpen] = useState(false);
@@ -135,11 +142,13 @@ export default function EditMode({
 
   const handleDragStart = (event: DragStartEvent) => {
     setDraggedItem(event.active.data.current);
+    parentOnDragStart(event);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setDraggedItem(null);
+    parentOnDragEnd(event);
 
     if (!over) return;
 
@@ -151,6 +160,7 @@ export default function EditMode({
       if (oldIndex !== newIndex) {
         const newPages = reorderPages(workingPages, oldIndex, newIndex);
         setWorkingPages(newPages);
+        onPagesChange(newPages);
         addEntry({
           operation: 'reorder_pages',
           details: { from: oldIndex, to: newIndex },
@@ -160,25 +170,47 @@ export default function EditMode({
       return;
     }
 
-    // Handle photo swapping
+    // Handle photo swapping/moving
     const sourceData = active.data.current;
     const targetData = over.data.current;
 
     if (sourceData && targetData) {
-      const newPages = swapPhotos(
-        workingPages,
-        sourceData.pageIndex,
-        sourceData.frameIndex,
-        targetData.pageIndex,
-        targetData.frameIndex,
-        photos
-      );
-      setWorkingPages(newPages);
-      addEntry({
-        operation: 'swap_photos',
-        details: { source: sourceData, target: targetData },
-      });
-      toast.success('Photos swapped');
+      // Check if it's a cross-page drag
+      if (sourceData.pageIndex !== targetData.pageIndex) {
+        // Move photo with automatic layout adjustment
+        const newPages = movePhotoWithLayoutAdjustment(
+          workingPages,
+          sourceData.pageIndex,
+          sourceData.frameIndex,
+          targetData.pageIndex,
+          targetData.frameIndex,
+          photos
+        );
+        setWorkingPages(newPages);
+        onPagesChange(newPages);
+        addEntry({
+          operation: 'move_photo_cross_page',
+          details: { source: sourceData, target: targetData },
+        });
+        toast.success('Photo moved and layouts adjusted');
+      } else {
+        // Same page swap
+        const newPages = swapPhotos(
+          workingPages,
+          sourceData.pageIndex,
+          sourceData.frameIndex,
+          targetData.pageIndex,
+          targetData.frameIndex,
+          photos
+        );
+        setWorkingPages(newPages);
+        onPagesChange(newPages);
+        addEntry({
+          operation: 'swap_photos',
+          details: { source: sourceData, target: targetData },
+        });
+        toast.success('Photos swapped');
+      }
     }
   };
 

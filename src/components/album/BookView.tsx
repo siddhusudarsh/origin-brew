@@ -1,10 +1,13 @@
 import { AlbumPage } from "@/lib/types";
+import FrameEditor from "./FrameEditor";
 
 interface BookViewProps {
   pages: AlbumPage[];
+  isEditMode?: boolean;
+  pageStartIndex?: number;
 }
 
-const BookView = ({ pages }: BookViewProps) => {
+const BookView = ({ pages, isEditMode = false, pageStartIndex = 0 }: BookViewProps) => {
   const leftPage = pages[0];
   const rightPage = pages[1];
 
@@ -12,13 +15,25 @@ const BookView = ({ pages }: BookViewProps) => {
     <div className="flex justify-center items-start gap-1">
       {/* Left Page */}
       <div 
-        className="w-[500px] h-[600px] rounded-l-lg border bg-white shadow-2xl overflow-hidden"
+        className="w-[500px] h-[600px] rounded-l-lg border bg-white shadow-2xl overflow-hidden relative"
       >
         {leftPage && (
-          <div 
-            dangerouslySetInnerHTML={{ __html: leftPage.svgContent }} 
-            style={{ width: '100%', height: '100%' }}
-          />
+          <>
+            <div 
+              dangerouslySetInnerHTML={{ __html: leftPage.svgContent }} 
+              style={{ width: '100%', height: '100%' }}
+            />
+            {isEditMode && leftPage.photoIds && leftPage.photoIds.map((photoId, frameIndex) => (
+              <FrameEditor
+                key={`frame-${pageStartIndex}-${frameIndex}`}
+                frameId={`frame-${pageStartIndex}-${frameIndex}`}
+                pageIndex={pageStartIndex}
+                frameIndex={frameIndex}
+                photoUrl={photoId}
+                isEditMode={isEditMode}
+              />
+            ))}
+          </>
         )}
       </div>
       
@@ -27,13 +42,25 @@ const BookView = ({ pages }: BookViewProps) => {
       
       {/* Right Page */}
       <div 
-        className="w-[500px] h-[600px] rounded-r-lg border bg-white shadow-2xl overflow-hidden"
+        className="w-[500px] h-[600px] rounded-r-lg border bg-white shadow-2xl overflow-hidden relative"
       >
         {rightPage && (
-          <div 
-            dangerouslySetInnerHTML={{ __html: rightPage.svgContent }} 
-            style={{ width: '100%', height: '100%' }}
-          />
+          <>
+            <div 
+              dangerouslySetInnerHTML={{ __html: rightPage.svgContent }} 
+              style={{ width: '100%', height: '100%' }}
+            />
+            {isEditMode && rightPage.photoIds && rightPage.photoIds.map((photoId, frameIndex) => (
+              <FrameEditor
+                key={`frame-${pageStartIndex + 1}-${frameIndex}`}
+                frameId={`frame-${pageStartIndex + 1}-${frameIndex}`}
+                pageIndex={pageStartIndex + 1}
+                frameIndex={frameIndex}
+                photoUrl={photoId}
+                isEditMode={isEditMode}
+              />
+            ))}
+          </>
         )}
       </div>
     </div>

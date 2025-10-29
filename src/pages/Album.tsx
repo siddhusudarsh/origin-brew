@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Grid3x3, BookOpen, Pencil } from "lucide-react";
+import { ArrowLeft, Grid3x3, BookOpen, Pencil, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Album as AlbumType, AlbumPage } from "@/lib/types";
+import { Album as AlbumType, AlbumPage, Photo } from "@/lib/types";
 import { generateAlbumPages, generateAlbumPagesWithAI } from "@/lib/layoutGenerator";
+import { analyzeImage } from "@/lib/imageAnalysis";
 import SinglePageView from "@/components/album/SinglePageView";
 import BookView from "@/components/album/BookView";
 import Header from "@/components/Header";
 import EditMode from "@/components/album/EditMode";
+import DragDropProvider from "@/components/album/DragDropProvider";
 import { toast } from "sonner";
+import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 type ViewMode = 'single' | 'book';
 
@@ -20,6 +23,9 @@ const Album = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('single');
   const [currentPage, setCurrentPage] = useState(0);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isAddingPhotos, setIsAddingPhotos] = useState(false);
+  const [draggedItem, setDraggedItem] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadAlbum = async () => {
@@ -102,6 +108,73 @@ const Album = () => {
     toast.info('Edit cancelled');
   };
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setDraggedItem(event.active.data.current);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    setDraggedItem(null);
+    // The actual drag handling is done in EditMode component
+  };
+
+  const handleAddPhotos = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleNewPhotosUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0 || !album) return;
+
+    setIsAddingPhotos(true);
+    toast.info(`Adding ${files.length} new photos...`);
+
+    try {
+      // Analyze new photos
+      const newPhotoAnalysis = await Promise.all(
+        Array.from(files).map(file => analyzeImage(file))
+      );
+      const newPhotos: Photo[] = newPhotoAnalysis.map((analysis, index) => ({
+        id: `photo-${Date.now()}-${index}`,
+        url: URL.createObjectURL(files[index]),
+        originalFilename: files[index].name,
+        width: analysis.width,
+        height: analysis.height,
+        aspectRatio: analysis.aspectRatio,
+        orientation: analysis.orientation,
+        priority: analysis.priority,
+      }));
+
+      // Merge with existing photos
+      const allPhotos = [...album.photos, ...newPhotos];
+
+      // Regenerate entire album with AI
+      const newPages = await generateAlbumPagesWithAI(allPhotos);
+
+      // Update album with new photos and pages
+      const updatedAlbum = {
+        ...album,
+        photos: allPhotos,
+        pages: newPages,
+        lastModified: new Date(),
+      };
+
+      localStorage.setItem(`album-${albumId}`, JSON.stringify(updatedAlbum));
+      setAlbum(updatedAlbum);
+      setPages(newPages);
+      setCurrentPage(0);
+
+      toast.success(`Added ${files.length} photos and regenerated album!`);
+    } catch (error) {
+      console.error('Error adding photos:', error);
+      toast.error('Failed to add photos');
+    } finally {
+      setIsAddingPhotos(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -115,6 +188,9 @@ const Album = () => {
           onCurrentPageChange={setCurrentPage}
           onSave={handleSaveEdit}
           onCancel={handleCancelEdit}
+          viewMode={viewMode}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
         />
       )}
       
@@ -144,14 +220,42 @@ const Album = () => {
 
       {/* Main Content */}
       <div className={`container mx-auto px-6 py-8 ${isEditMode ? 'pb-32' : ''}`}>
-        {/* View Mode Content */}
-        <div className="mb-8">
-          {viewMode === 'single' ? (
-            <SinglePageView pages={getCurrentPages()} />
-          ) : (
-            <BookView pages={getCurrentPages()} />
-          )}
-        </div>
+        {isEditMode ? (
+          <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            {/* View Mode Content */}
+            <div className="mb-8">
+              {viewMode === 'single' ? (
+                <SinglePageView 
+                  pages={getCurrentPages()} 
+                  isEditMode={isEditMode}
+                  pageStartIndex={currentPage}
+                />
+              ) : (
+                <BookView 
+                  pages={getCurrentPages()} 
+                  isEditMode={isEditMode}
+                  pageStartIndex={currentPage}
+                />
+              )}
+            </div>
+          </DragDropProvider>
+        ) : (
+          <div className="mb-8">
+            {viewMode === 'single' ? (
+              <SinglePageView 
+                pages={getCurrentPages()} 
+                isEditMode={isEditMode}
+                pageStartIndex={currentPage}
+              />
+            ) : (
+              <BookView 
+                pages={getCurrentPages()} 
+                isEditMode={isEditMode}
+                pageStartIndex={currentPage}
+              />
+            )}
+          </div>
+        )}
 
         {/* Navigation */}
         {!isEditMode && (
@@ -179,16 +283,39 @@ const Album = () => {
         )}
       </div>
 
+      {/* Hidden file input for adding photos */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleNewPhotosUpload}
+        className="hidden"
+      />
+
       {/* Floating Action Buttons */}
       {!isEditMode && (
         <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3">
+          {viewMode === 'book' && (
+            <Button
+              size="lg"
+              onClick={() => setIsEditMode(true)}
+              className="rounded-full shadow-lg"
+            >
+              <Pencil className="mr-2 h-5 w-5" />
+              Edit
+            </Button>
+          )}
+          
           <Button
             size="lg"
-            onClick={() => setIsEditMode(true)}
+            variant="secondary"
+            onClick={handleAddPhotos}
+            disabled={isAddingPhotos}
             className="rounded-full shadow-lg"
           >
-            <Pencil className="mr-2 h-5 w-5" />
-            Edit
+            <Plus className="mr-2 h-5 w-5" />
+            {isAddingPhotos ? 'Adding...' : 'Add Photos'}
           </Button>
           
           <Button

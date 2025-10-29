@@ -204,3 +204,95 @@ function extractPhotoIdsFromPage(page: AlbumPage): string[] {
   // Fallback to photoIds property if available
   return page.photoIds || photoIds;
 }
+
+/**
+ * Move a photo from one page to another with automatic layout adjustment
+ * When moving a photo between pages, automatically adjusts layouts to accommodate the new frame counts
+ */
+export function movePhotoWithLayoutAdjustment(
+  pages: AlbumPage[],
+  sourcePageIndex: number,
+  sourceFrameIndex: number,
+  targetPageIndex: number,
+  targetFrameIndex: number,
+  photos: Photo[]
+): AlbumPage[] {
+  const newPages = [...pages];
+  const sourcePage = newPages[sourcePageIndex];
+  const targetPage = newPages[targetPageIndex];
+
+  // Extract photo IDs
+  const sourcePhotoIds = extractPhotoIdsFromPage(sourcePage);
+  const targetPhotoIds = extractPhotoIdsFromPage(targetPage);
+
+  // Remove photo from source page
+  const movedPhotoId = sourcePhotoIds[sourceFrameIndex];
+  sourcePhotoIds.splice(sourceFrameIndex, 1);
+
+  // Add photo to target page at the target position
+  targetPhotoIds.splice(targetFrameIndex, 0, movedPhotoId);
+
+  // Find appropriate layouts for new frame counts
+  const sourceLayoutName = findLayoutForFrameCount(sourcePhotoIds.length);
+  const targetLayoutName = findLayoutForFrameCount(targetPhotoIds.length);
+
+  // Regenerate source page with new layout
+  const sourcePhotos = sourcePhotoIds.map(id => photos.find(p => p.id === id)!).filter(Boolean);
+  const sourceLayoutTemplate = layoutTemplates[sourceLayoutName];
+  const sourceUniqueSVG = uniquifySVGIds(sourceLayoutTemplate, sourcePage.id);
+  const sourcePhotosMap = new Map(sourcePhotos.map(p => [p.id, p]));
+  const sourceAssignments = sourcePhotoIds.map((id, idx) => ({ frameNumber: idx + 1, photoId: id }));
+  
+  newPages[sourcePageIndex] = {
+    ...sourcePage,
+    layoutName: sourceLayoutName,
+    svgContent: injectImagesIntoSVG(sourceUniqueSVG, sourceAssignments, sourcePhotosMap),
+    photoIds: sourcePhotoIds,
+  };
+
+  // Regenerate target page with new layout
+  const targetPhotos = targetPhotoIds.map(id => photos.find(p => p.id === id)!).filter(Boolean);
+  const targetLayoutTemplate = layoutTemplates[targetLayoutName];
+  const targetUniqueSVG = uniquifySVGIds(targetLayoutTemplate, targetPage.id);
+  const targetPhotosMap = new Map(targetPhotos.map(p => [p.id, p]));
+  const targetAssignments = targetPhotoIds.map((id, idx) => ({ frameNumber: idx + 1, photoId: id }));
+  
+  newPages[targetPageIndex] = {
+    ...targetPage,
+    layoutName: targetLayoutName,
+    svgContent: injectImagesIntoSVG(targetUniqueSVG, targetAssignments, targetPhotosMap),
+    photoIds: targetPhotoIds,
+  };
+
+  return newPages;
+}
+
+/**
+ * Find an appropriate layout for a given frame count
+ */
+function findLayoutForFrameCount(frameCount: number): string {
+  // Map of frame counts to preferred layouts
+  const layoutsByFrameCount: Record<number, string[]> = {
+    1: ['singlephoto.svg'],
+    2: ['layout4.svg'],
+    3: ['layout3.svg', 'layout5.svg', 'layout11.svg', 'layout12.svg'],
+    4: ['layout2.svg', 'layout6.svg', 'layout7.svg', 'layout10.svg', 'layout13.svg', 'layout14.svg'],
+    5: ['layout8.svg', 'layout9.svg', 'layout15.svg', 'layout16.svg'],
+    6: ['layout17.svg', 'layout18.svg'],
+    7: ['layout1.svg'],
+  };
+
+  const availableLayouts = layoutsByFrameCount[frameCount];
+  if (!availableLayouts || availableLayouts.length === 0) {
+    // Fallback: use closest frame count layout
+    const closestCount = Object.keys(layoutsByFrameCount)
+      .map(Number)
+      .reduce((prev, curr) => 
+        Math.abs(curr - frameCount) < Math.abs(prev - frameCount) ? curr : prev
+      );
+    return layoutsByFrameCount[closestCount][0];
+  }
+
+  // Return first available layout (could be randomized for variety)
+  return availableLayouts[0];
+}
