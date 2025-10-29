@@ -22,28 +22,34 @@ const NewAlbum = () => {
     input.type = 'file';
     input.multiple = true;
     input.accept = 'image/*';
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
-        // Convert files to URLs for preview
-        const photoUrls: string[] = [];
-        const fileArray = Array.from(files);
-        
-        fileArray.forEach((file) => {
-          const url = URL.createObjectURL(file);
-          photoUrls.push(url);
-        });
-
         toast.success(`${files.length} photos uploaded successfully!`);
+        toast.info("Creating your photobook...");
         
-        // Navigate to album view with photos
-        navigate("/album-view", {
-          state: {
-            photos: photoUrls,
-            albumTitle: title,
-            albumSubtitle: subtitle
-          }
-        });
+        // Convert files to photo objects with blob URLs
+        const photos = Array.from(files).map((file, index) => ({
+          id: `photo-${Date.now()}-${index}`,
+          url: URL.createObjectURL(file),
+          originalFilename: file.name,
+          file: file // Keep file for potential backend upload later
+        }));
+
+        // Store album data in localStorage for now (will use backend later)
+        const albumId = `album-${Date.now()}`;
+        const albumData = {
+          id: albumId,
+          title,
+          subtitle,
+          photos,
+          createdAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem(`album-${albumId}`, JSON.stringify(albumData));
+        
+        // Navigate to album view
+        navigate(`/album/${albumId}`);
       }
     };
     input.click();

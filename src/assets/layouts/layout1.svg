@@ -1,0 +1,73 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <!-- Frame 1: Top Left (260x180) -->
+        <pattern id="img1" patternUnits="userSpaceOnUse" x="0" y="0" width="260" height="180">
+            <image href="" x="0" y="0" width="260" height="180" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip1">
+            <path d="M0 0 H260 V180 H0 Z" />
+        </clipPath>
+
+        <!-- Frame 2: Top Right Upper (135x87.5) -->
+        <pattern id="img2" patternUnits="userSpaceOnUse" x="265" y="0" width="135" height="87.5">
+            <image href="" x="0" y="0" width="135" height="87.5" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip2">
+            <path d="M265 0 H400 V87.5 H265 Z" />
+        </clipPath>
+
+        <!-- Frame 3: Top Right Lower (135x87.5) -->
+        <pattern id="img3" patternUnits="userSpaceOnUse" x="265" y="92.5" width="135" height="87.5">
+            <image href="" x="0" y="0" width="135" height="87.5" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip3">
+            <path d="M265 92.5 H400 V180 H265 Z" />
+        </clipPath>
+
+        <!-- Frame 4: Bottom Left (160x215) -->
+        <pattern id="img4" patternUnits="userSpaceOnUse" x="0" y="185" width="160" height="215">
+            <image href="" x="0" y="0" width="160" height="215" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip4">
+            <path d="M0 185 H160 V400 H0 Z" />
+        </clipPath>
+
+        <!-- Frame 5: Bottom Right Upper (235x100) -->
+        <pattern id="img5" patternUnits="userSpaceOnUse" x="165" y="185" width="235" height="100">
+            <image href="" x="0" y="0" width="235" height="100" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip5">
+            <path d="M165 185 H400 V285 H165 Z" />
+        </clipPath>
+
+        <!-- Frame 6: Bottom Right Lower Left (115x110) -->
+        <pattern id="img6" patternUnits="userSpaceOnUse" x="165" y="290" width="115" height="110">
+            <image href="" x="0" y="0" width="115" height="110" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip6">
+            <path d="M165 290 H280 V400 H165 Z" />
+        </clipPath>
+
+        <!-- Frame 7: Bottom Right Lower Right (115x110) -->
+        <pattern id="img7" patternUnits="userSpaceOnUse" x="285" y="290" width="115" height="110">
+            <image href="" x="0" y="0" width="115" height="110" preserveAspectRatio="xMidYMid slice" />
+        </pattern>
+        <clipPath id="clip7">
+            <path d="M285 290 H400 V400 H285 Z" />
+        </clipPath>
+    </defs>
+
+    <!-- Background -->
+    <rect width="400" height="400" fill="#FFFFFF" />
+
+    <!-- Image frames -->
+    <g>
+        <path d="M0 0 H260 V180 H0 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+        <path d="M265 0 H400 V87.5 H265 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+        <path d="M265 92.5 H400 V180 H265 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
+        <path d="M0 185 H160 V400 H0 Z" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
+        <path d="M165 185 H400 V285 H165 Z" fill="url(#img5)" clip-path="url(#clip5)" data-photo-frame="5" />
+        <path d="M165 290 H280 V400 H165 Z" fill="url(#img6)" clip-path="url(#clip6)" data-photo-frame="6" />
+        <path d="M285 290 H400 V400 H285 Z" fill="url(#img7)" clip-path="url(#clip7)" data-photo-frame="7" />
+    </g>
+</svg>

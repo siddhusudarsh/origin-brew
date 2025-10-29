@@ -1,0 +1,62 @@
+{
+  "layout1.svg": {
+    "name": "layout1.svg",
+    "frameCount": 2,
+    "orientation": "mixed",
+    "description": "Two photo layout with rectangular frames"
+  },
+  "layout2.svg": {
+    "name": "layout2.svg",
+    "frameCount": 3,
+    "orientation": "mixed",
+    "description": "Three photo layout"
+  },
+  "layout3.svg": {
+    "name": "layout3.svg",
+    "frameCount": 4,
+    "orientation": "mixed",
+    "description": "Four photo grid layout"
+  },
+  "layout4.svg": {
+    "name": "layout4.svg",
+    "frameCount": 5,
+    "orientation": "mixed",
+    "description": "Five photo mixed layout"
+  },
+  "layout5.svg": {
+    "name": "layout5.svg",
+    "frameCount": 3,
+    "orientation": "landscape",
+    "description": "Three horizontal photo layout"
+  },
+  "layout6.svg": {
+    "name": "layout6.svg",
+    "frameCount": 6,
+    "orientation": "mixed",
+    "description": "Six photo collage layout"
+  },
+  "layout7.svg": {
+    "name": "layout7.svg",
+    "frameCount": 4,
+    "orientation": "portrait",
+    "description": "Four portrait photo layout"
+  },
+  "layout8.svg": {
+    "name": "layout8.svg",
+    "frameCount": 5,
+    "orientation": "mixed",
+    "description": "Five photo creative layout"
+  },
+  "layout9.svg": {
+    "name": "layout9.svg",
+    "frameCount": 7,
+    "orientation": "mixed",
+    "description": "Seven photo elaborate layout"
+  },
+  "layout10.svg": {
+    "name": "layout10.svg",
+    "frameCount": 4,
+    "orientation": "square",
+    "description": "Four square photo layout"
+  }
+}
