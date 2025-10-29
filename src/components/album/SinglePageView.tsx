@@ -13,11 +13,11 @@ const SinglePageView = ({ pages }: SinglePageViewProps) => {
     <div className="flex justify-center">
       <div 
         className="bg-white rounded-lg shadow-2xl overflow-hidden"
-        style={{ maxWidth: '800px', width: '100%' }}
+        style={{ width: '500px', height: '600px' }}
       >
         <div 
           dangerouslySetInnerHTML={{ __html: page.svgContent }}
-          className="w-full"
+          style={{ width: '100%', height: '100%' }}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-<svg width="500" height="600" viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
   <defs>
     <!-- Frame 1: Top Left -->
     <pattern id="img1" patternUnits="userSpaceOnUse" x="50" y="50" width="180" height="180">

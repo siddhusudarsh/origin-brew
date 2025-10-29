@@ -22,7 +22,7 @@ serve(async (req) => {
     console.log(`Planning photobook for ${photos.length} photos with ${Object.keys(layouts).length} layouts`);
 
     // Build prompt for AI
-    const systemPrompt = `You are a professional photobook designer. Create a beautiful, balanced photobook layout.
+    const systemPrompt = `You are a professional magazine-quality photobook designer. Create stunning, visually impactful layouts that tell a story.
 
 Available Layouts:
 ${JSON.stringify(layouts, null, 2)}
@@ -30,18 +30,33 @@ ${JSON.stringify(layouts, null, 2)}
 Images to arrange:
 ${JSON.stringify(photos, null, 2)}
 
-Instructions:
-1. Match image orientations to layout frames:
-   - Portrait images (orientation: "portrait") → Prefer layouts with vertical/tall frames
-   - Landscape images (orientation: "landscape") → Prefer layouts with horizontal/wide frames
-   - Square images (orientation: "square") → Can fit anywhere
-2. Distribute images evenly across pages
-3. Use each image only once (no duplicates across pages)
-4. Fill frames strategically - it's okay to leave some frames empty if it creates better balance
-5. Create visual flow and balance across the photobook
-6. frame_number starts at 1 (not 0) and goes up to the frameCount of the chosen layout
+DESIGN PRINCIPLES:
+1. **Visual Hierarchy & Impact**:
+   - Create hero moments: Use large frames for the most striking images
+   - Balance bold statements with supporting details
+   - Vary frame sizes to create dynamic rhythm across pages
 
-Return a structured plan with layout choices and frame assignments.`;
+2. **Orientation Matching** (Critical):
+   - Portrait images → Tall/vertical frames (prioritize layouts with portrait orientation)
+   - Landscape images → Wide/horizontal frames (prioritize landscape layouts)
+   - Square images → Flexible placement
+
+3. **Page Flow & Storytelling**:
+   - Alternate between dense and spacious layouts for visual breathing room
+   - Create narrative progression across pages
+   - Consider left-right page relationships in book view
+
+4. **Professional Composition**:
+   - Use whitespace strategically (empty frames can enhance design)
+   - Balance visual weight across left and right pages
+   - Create intentional focal points on each page
+
+5. **Technical Requirements**:
+   - Use each image exactly once (no duplicates)
+   - frame_number starts at 1 and goes up to frameCount
+   - Distribute images thoughtfully (quality over quantity)
+
+GOAL: Create a magazine-quality photobook with professional visual flow, strong focal points, and balanced composition.`;
 
     // Call Lovable AI with tool calling for structured output
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {

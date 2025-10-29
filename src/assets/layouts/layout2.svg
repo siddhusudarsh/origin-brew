@@ -1,62 +1,57 @@
-<!-- CORRECTED AND EDITABLE: layout-scrapbook.svg -->
-<svg width="500" height="750" viewBox="0 0 500 750" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
   <defs>
-    <!-- Frame 1: Bottom Left (starts at 78,458 size 184×234) -->
-    <pattern id="img1" patternUnits="userSpaceOnUse" x="78" y="458" width="184" height="234">
-      <image href="" x="0" y="0" width="184" height="234" preserveAspectRatio="xMidYMid slice" />
+    <!-- Frame 1: Bottom Left -->
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="52" y="366" width="123" height="187">
+      <image href="" x="0" y="0" width="123" height="187" preserveAspectRatio="xMidYMid slice" />
     </pattern>
     <clipPath id="clip1">
-      <path d="M78 458 h184 v234 h-184 Z" />
+      <path d="M52 366 h123 v187 h-123 Z" />
     </clipPath>
 
-    <!-- Frame 2: Top Left (starts at 58,158 size 164×254) -->
-    <pattern id="img2" patternUnits="userSpaceOnUse" x="58" y="158" width="164" height="254">
-      <image href="" x="0" y="0" width="164" height="254" preserveAspectRatio="xMidYMid slice" />
+    <!-- Frame 2: Top Left -->
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="39" y="126" width="109" height="203">
+      <image href="" x="0" y="0" width="109" height="203" preserveAspectRatio="xMidYMid slice" />
     </pattern>
     <clipPath id="clip2">
-      <path d="M58 158 h164 v254 h-164 Z" />
+      <path d="M39 126 h109 v203 h-109 Z" />
     </clipPath>
 
-    <!-- Frame 3: Middle Right (starts at 278,258 size 184×184) -->
-    <pattern id="img3" patternUnits="userSpaceOnUse" x="278" y="258" width="184" height="184">
-      <image href="" x="0" y="0" width="184" height="184" preserveAspectRatio="xMidYMid slice" />
+    <!-- Frame 3: Middle Right -->
+    <pattern id="img3" patternUnits="userSpaceOnUse" x="185" y="206" width="123" height="147">
+      <image href="" x="0" y="0" width="123" height="147" preserveAspectRatio="xMidYMid slice" />
     </pattern>
     <clipPath id="clip3">
-      <path d="M278 258 h184 v184 h-184 Z" />
+      <path d="M185 206 h123 v147 h-123 Z" />
     </clipPath>
 
-    <!-- Frame 4: Bottom Right (starts at 248,488 size 194×194) -->
-    <pattern id="img4" patternUnits="userSpaceOnUse" x="248" y="488" width="194" height="194">
-      <image href="" x="0" y="0" width="194" height="194" preserveAspectRatio="xMidYMid slice" />
+    <!-- Frame 4: Bottom Right -->
+    <pattern id="img4" patternUnits="userSpaceOnUse" x="165" y="390" width="129" height="155">
+      <image href="" x="0" y="0" width="129" height="155" preserveAspectRatio="xMidYMid slice" />
     </pattern>
     <clipPath id="clip4">
-      <path d="M248 488 h194 v194 h-194 Z" />
+      <path d="M165 390 h129 v155 h-129 Z" />
     </clipPath>
   </defs>
 
   <!-- Background with torn paper effect -->
-  <path d="M0 0 H500 V750 H0 Z" fill="#d3c4a8" />
-  <path fill="#f0e9d8" d="M0 0 H500 V70 C400 50, 300 80, 200 60, 100 85, 0 60 Z" />
-  <path fill="#f0e9d8" d="M0 680 C100 700, 200 670, 300 690, 400 710, 500 680 V750 H0 Z" />
+  <path d="M0 0 H500 V600 H0 Z" fill="#d3c4a8" />
+  <path fill="#f0e9d8" d="M0 0 H500 V56 C400 40, 300 64, 200 48, 100 68, 0 48 Z" />
+  <path fill="#f0e9d8" d="M0 544 C100 560, 200 536, 300 552, 400 568, 500 544 V600 H0 Z" />
 
-  <!-- Frames with decorative white borders (same visual design) -->
-  <!-- Frame 1 group (rotated border), image path is separate and not rotated -->
-  <g transform="rotate(-10, 170, 575)">
-    <path d="M70 450 h200 v250 h-200 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
+  <!-- Frames with decorative white borders -->
+  <g transform="rotate(-10, 113, 460)">
+    <path d="M47 360 h133 v200 h-133 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
   </g>
-  <path d="M78 458 h184 v234 h-184 Z" transform="rotate(-10, 170, 575)" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+  <path d="M52 366 h123 v187 h-123 Z" transform="rotate(-10, 113, 460)" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
 
-  <!-- Frame 2 group (rotated border) -->
-  <g transform="rotate(-5, 140, 285)">
-    <path d="M50 150 h180 v270 h-180 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
+  <g transform="rotate(-5, 93, 228)">
+    <path d="M33 120 h120 v216 h-120 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
   </g>
-  <path d="M58 158 h164 v254 h-164 Z" transform="rotate(-5, 140, 285)" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+  <path d="M39 126 h109 v203 h-109 Z" transform="rotate(-5, 93, 228)" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
 
-  <!-- Frame 3 border and image -->
-  <path d="M270 250 h200 v200 h-200 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
-  <path d="M278 258 h184 v184 h-184 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
+  <path d="M180 200 h133 v160 h-133 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
+  <path d="M185 206 h123 v147 h-123 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
 
-  <!-- Frame 4 border and image -->
-  <path d="M240 480 h210 v210 h-210 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
-  <path d="M248 488 h194 v194 h-194 Z" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
+  <path d="M160 384 h140 v168 h-140 Z" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));" />
+  <path d="M165 390 h129 v155 h-129 Z" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
 </svg>
