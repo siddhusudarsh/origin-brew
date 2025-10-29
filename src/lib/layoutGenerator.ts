@@ -79,21 +79,36 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
     // Generate pages from AI plan
     const pages: AlbumPage[] = [];
     const photosMap = new Map(photos.map(p => [p.id, p]));
-
+    // Diversify layouts: rotate among templates with matching frame counts
+    const layoutsByFrameCount = Object.entries(layoutsMetadata).reduce((acc, [name, meta]) => {
+      (acc[meta.frameCount] ||= []).push(name);
+      return acc;
+    }, {} as Record<number, string[]>);
+    const rotationIndex: Record<number, number> = {};
     cleanedPages.forEach((pagePlan, pageIndex) => {
-      const layoutName = pagePlan.layout_to_use;
-      const layout = layoutsMetadata[layoutName as keyof typeof layoutsMetadata];
-      const templateSvg = layoutTemplates[layoutName];
+      const originalLayoutName = pagePlan.layout_to_use;
+      // Determine frames needed for this page
+      const framesNeeded = pagePlan.frames.length;
+      // Rotate among layouts that have the same frame count to avoid repetition
+      let chosenLayoutName = originalLayoutName;
+      const candidates = layoutsByFrameCount[framesNeeded];
+      if (candidates && candidates.length) {
+        const idx = rotationIndex[framesNeeded] ?? 0;
+        chosenLayoutName = candidates[idx % candidates.length];
+        rotationIndex[framesNeeded] = idx + 1;
+      }
+      const layout = layoutsMetadata[chosenLayoutName as keyof typeof layoutsMetadata];
+      const templateSvg = layoutTemplates[chosenLayoutName];
 
       if (!templateSvg || !layout) {
-        console.error(`Template not found: ${layoutName}`);
+        console.error(`Template not found: ${chosenLayoutName}`);
         return;
       }
 
       // Validate frame numbers
       const validFrames = pagePlan.frames.filter(frame => {
         if (frame.frame_number < 1 || frame.frame_number > layout.frameCount) {
-          console.warn(`Invalid frame_number ${frame.frame_number} for ${layoutName}`);
+          console.warn(`Invalid frame_number ${frame.frame_number} for ${chosenLayoutName}`);
           return false;
         }
         return true;
@@ -114,7 +129,7 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
         id: `page-${pageIndex}`,
         pageNumber: pageIndex,
         svgContent,
-        layoutName,
+        layoutName: chosenLayoutName,
       });
     });
 
