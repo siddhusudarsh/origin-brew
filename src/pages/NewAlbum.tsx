@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const NewAlbum = () => {
   const navigate = useNavigate();
@@ -12,16 +13,37 @@ const NewAlbum = () => {
   const [useOldEditor, setUseOldEditor] = useState(false);
 
   const handleUploadPhotos = () => {
-    // Handle photo upload logic
+    if (!title.trim()) {
+      toast.error("Please enter a title for your album");
+      return;
+    }
+
     const input = document.createElement('input');
     input.type = 'file';
     input.multiple = true;
     input.accept = 'image/*';
     input.onchange = (e) => {
       const files = (e.target as HTMLInputElement).files;
-      if (files) {
-        console.log('Selected files:', files);
-        // Handle the uploaded files here
+      if (files && files.length > 0) {
+        // Convert files to URLs for preview
+        const photoUrls: string[] = [];
+        const fileArray = Array.from(files);
+        
+        fileArray.forEach((file) => {
+          const url = URL.createObjectURL(file);
+          photoUrls.push(url);
+        });
+
+        toast.success(`${files.length} photos uploaded successfully!`);
+        
+        // Navigate to album view with photos
+        navigate("/album-view", {
+          state: {
+            photos: photoUrls,
+            albumTitle: title,
+            albumSubtitle: subtitle
+          }
+        });
       }
     };
     input.click();
