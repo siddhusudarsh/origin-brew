@@ -1,0 +1,50 @@
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
+  <defs>
+    <!-- Frame 1: Large Left -->
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="30" y="45" width="220" height="510">
+      <image href="" x="0" y="0" width="220" height="510" preserveAspectRatio="xMidYMid slice" />
+    </pattern>
+    <clipPath id="clip1">
+      <path d="M30 45 h220 v510 h-220 Z" />
+    </clipPath>
+
+    <!-- Frame 2: Top Right -->
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="290" y="45" width="180" height="165">
+      <image href="" x="0" y="0" width="180" height="165" preserveAspectRatio="xMidYMid slice" />
+    </pattern>
+    <clipPath id="clip2">
+      <path d="M290 45 h180 v165 h-180 Z" />
+    </clipPath>
+
+    <!-- Frame 3: Middle Right -->
+    <pattern id="img3" patternUnits="userSpaceOnUse" x="290" y="270" width="180" height="135">
+      <image href="" x="0" y="0" width="180" height="135" preserveAspectRatio="xMidYMid slice" />
+    </pattern>
+    <clipPath id="clip3">
+      <path d="M290 270 h180 v135 h-180 Z" />
+    </clipPath>
+
+    <!-- Frame 4: Bottom Right -->
+    <pattern id="img4" patternUnits="userSpaceOnUse" x="290" y="465" width="180" height="90">
+      <image href="" x="0" y="0" width="180" height="90" preserveAspectRatio="xMidYMid slice" />
+    </pattern>
+    <clipPath id="clip4">
+      <path d="M290 465 h180 v90 h-180 Z" />
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="600" fill="#f5f5f5" />
+
+  <!-- White borders around frames -->
+  <rect x="20" y="30" width="240" height="540" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));" />
+  <rect x="280" y="30" width="200" height="195" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));" />
+  <rect x="280" y="255" width="200" height="165" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));" />
+  <rect x="280" y="450" width="200" height="120" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));" />
+
+  <!-- Image frames -->
+  <rect x="30" y="45" width="220" height="510" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+  <rect x="290" y="45" width="180" height="165" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+  <rect x="290" y="270" width="180" height="135" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
+  <rect x="290" y="465" width="180" height="90" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
+</svg>

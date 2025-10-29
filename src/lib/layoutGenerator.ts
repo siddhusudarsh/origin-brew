@@ -15,6 +15,15 @@ import layout7 from '@/assets/layouts/layout7.svg?raw';
 import layout8 from '@/assets/layouts/layout8.svg?raw';
 import layout9 from '@/assets/layouts/layout9.svg?raw';
 import layout10 from '@/assets/layouts/layout10.svg?raw';
+import layout11 from '@/assets/layouts/layout11.svg?raw';
+import layout12 from '@/assets/layouts/layout12.svg?raw';
+import layout13 from '@/assets/layouts/layout13.svg?raw';
+import layout14 from '@/assets/layouts/layout14.svg?raw';
+import layout15 from '@/assets/layouts/layout15.svg?raw';
+import layout16 from '@/assets/layouts/layout16.svg?raw';
+import layout17 from '@/assets/layouts/layout17.svg?raw';
+import layout18 from '@/assets/layouts/layout18.svg?raw';
+import singlephoto from '@/assets/layouts/singlephoto.svg?raw';
 
 const layoutTemplates: Record<string, string> = {
   'layout1.svg': layout1,
@@ -27,6 +36,15 @@ const layoutTemplates: Record<string, string> = {
   'layout8.svg': layout8,
   'layout9.svg': layout9,
   'layout10.svg': layout10,
+  'layout11.svg': layout11,
+  'layout12.svg': layout12,
+  'layout13.svg': layout13,
+  'layout14.svg': layout14,
+  'layout15.svg': layout15,
+  'layout16.svg': layout16,
+  'layout17.svg': layout17,
+  'layout18.svg': layout18,
+  'singlephoto.svg': singlephoto,
 };
 
 /**
