@@ -91,13 +91,12 @@ function autoCorrectLayoutPlan(
       const isPortraitFrame = frameAspect < 0.85;
       const isLandscapeFrame = frameAspect > 1.2;
 
-      // REJECT if severe mismatch
-      if (
-        (isPortraitPhoto && isLandscapeFrame) || 
-        (isLandscapePhoto && isPortraitFrame) ||
-        aspectDiff > 0.5
-      ) {
-        console.warn(`❌ REJECTING: Photo ${photo.id} (aspect ${photoAspect.toFixed(2)}) in frame (aspect ${frameAspect.toFixed(2)})`);
+      // REJECT only the worst mismatches to avoid empty frames
+      // Allow aspect differences up to 0.75 unless there's an orientation mismatch
+      const hasOrientationMismatch = (isPortraitPhoto && isLandscapeFrame) || (isLandscapePhoto && isPortraitFrame);
+      
+      if (hasOrientationMismatch || aspectDiff > 0.75) {
+        console.warn(`❌ REJECTING: Photo ${photo.id} (aspect ${photoAspect.toFixed(2)}) in frame (aspect ${frameAspect.toFixed(2)}) - ${hasOrientationMismatch ? 'orientation mismatch' : 'extreme aspect diff'}`);
         continue; // Skip this assignment
       }
 
