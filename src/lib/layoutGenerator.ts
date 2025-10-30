@@ -58,6 +58,84 @@ function recommendPriorityLayouts(distribution: ReturnType<typeof analyzePhotoDi
 }
 
 /**
+ * Auto-correct layout plan to fix AI mistakes
+ */
+function autoCorrectLayoutPlan(
+  plan: AILayoutPlan,
+  photos: Photo[],
+  layouts: typeof layoutsMetadata
+): AILayoutPlan {
+  const photosMap = new Map(photos.map(p => [p.id, p]));
+  const correctedPages = [];
+  const unassignedPhotos = new Set(photos.map(p => p.id));
+
+  for (const page of plan.pages) {
+    const layout = layouts[page.layout_to_use as keyof typeof layouts];
+    if (!layout) continue;
+
+    const correctedFrames = [];
+
+    for (const frameAssignment of page.frames) {
+      const photo = photosMap.get(frameAssignment.image_id);
+      const frameData = layout.frames.find(f => f.id === frameAssignment.frame_number);
+      
+      if (!photo || !frameData) continue;
+
+      const photoAspect = photo.aspectRatio || 1;
+      const frameAspect = frameData.aspect_ratio;
+      const aspectDiff = Math.abs(photoAspect - frameAspect);
+
+      // CRITICAL: Detect orientation mismatches
+      const isPortraitPhoto = photoAspect < 0.85;
+      const isLandscapePhoto = photoAspect > 1.15;
+      const isPortraitFrame = frameAspect < 0.85;
+      const isLandscapeFrame = frameAspect > 1.2;
+
+      // REJECT if severe mismatch
+      if (
+        (isPortraitPhoto && isLandscapeFrame) || 
+        (isLandscapePhoto && isPortraitFrame) ||
+        aspectDiff > 0.5
+      ) {
+        console.warn(`❌ REJECTING: Photo ${photo.id} (aspect ${photoAspect.toFixed(2)}) in frame (aspect ${frameAspect.toFixed(2)})`);
+        continue; // Skip this assignment
+      }
+
+      // Accept good matches
+      correctedFrames.push(frameAssignment);
+      unassignedPhotos.delete(frameAssignment.image_id);
+    }
+
+    if (correctedFrames.length > 0) {
+      correctedPages.push({
+        ...page,
+        frames: correctedFrames
+      });
+    }
+  }
+
+  // Reassign unassigned photos using simple fallback
+  if (unassignedPhotos.size > 0) {
+    console.log(`♻️ Reassigning ${unassignedPhotos.size} rejected photos...`);
+    const remainingPhotos = Array.from(unassignedPhotos)
+      .map(id => photosMap.get(id))
+      .filter(Boolean) as Photo[];
+    
+    // Use simple layout assignment for remaining photos
+    const fallbackPages = generateAlbumPages(remainingPhotos);
+    correctedPages.push(...fallbackPages.map((page, idx) => ({
+      layout_to_use: page.layoutName,
+      frames: page.photoIds.map((photoId, frameIdx) => ({
+        frame_number: frameIdx + 1,
+        image_id: photoId
+      }))
+    })));
+  }
+
+  return { pages: correctedPages };
+}
+
+/**
  * Validates layout plan and logs warnings for poor aspect ratio matches
  */
 function validateLayoutPlan(
@@ -174,14 +252,54 @@ const layoutTemplates: Record<string, string> = {
  */
 export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPage[]> {
   try {
+    console.log('Starting AI-powered album generation with', photos.length, 'photos');
+    
     // Analyze photo distribution
     const distribution = analyzePhotoDistribution(photos);
-    const priorityLayouts = recommendPriorityLayouts(distribution);
+    
+    // Pre-select suitable layouts based on photo distribution
+    const suitableLayouts: Record<string, any> = {};
+    
+    Object.entries(layoutsMetadata).forEach(([name, layout]) => {
+      // Count how many photos would fit well in this layout
+      let goodFits = 0;
+      
+      for (const frame of layout.frames) {
+        const matchingPhotos = photos.filter(photo => {
+          const photoAspect = photo.aspectRatio || 1;
+          const frameAspect = frame.aspect_ratio;
+          const aspectDiff = Math.abs(photoAspect - frameAspect);
+          
+          // Check orientation compatibility
+          const isPortraitPhoto = photoAspect < 0.85;
+          const isLandscapePhoto = photoAspect > 1.15;
+          const isPortraitFrame = frameAspect < 0.85;
+          const isLandscapeFrame = frameAspect > 1.2;
+          
+          // Good fit if orientations match AND aspect diff is acceptable
+          return aspectDiff < 0.4 && 
+                 !((isPortraitPhoto && isLandscapeFrame) || 
+                   (isLandscapePhoto && isPortraitFrame));
+        });
+        
+        if (matchingPhotos.length > 0) goodFits++;
+      }
+      
+      // Layout is suitable if at least 50% of frames have good photo matches
+      if (goodFits >= layout.frameCount * 0.5) {
+        suitableLayouts[name] = layout;
+      }
+    });
+    
+    // Fallback: if no suitable layouts found, use all layouts
+    const layoutsToSend = Object.keys(suitableLayouts).length > 0 
+      ? suitableLayouts 
+      : layoutsMetadata;
     
     console.log('Photo distribution analysis:', {
       distribution,
-      priorityLayouts,
       totalPhotos: photos.length,
+      suitableLayoutsCount: Object.keys(layoutsToSend).length,
     });
     
     // Prepare photo metadata for AI with enhanced information
@@ -194,7 +312,7 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
     // Call edge function for AI layout planning
     const { data, error } = await supabase.functions.invoke('plan-photobook', {
       body: {
-        layouts: layoutsMetadata,
+        layouts: layoutsToSend,
         photos: photoMetadata,
       },
     });
@@ -209,21 +327,31 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
       return generateAlbumPages(photos);
     }
 
-    const aiPlan: AILayoutPlan = data;
+    let aiPlan: AILayoutPlan = data;
     
     // Validate the AI plan for aspect ratio issues
     const validation = validateLayoutPlan(aiPlan, photos, layoutsMetadata);
-    if (!validation.isValid) {
-      console.warn('AI generated plan has validation issues:', validation.warnings);
-      // Show warning toast for critical issues
-      const criticalWarnings = validation.warnings.filter(w => w.includes('CRITICAL'));
-      if (criticalWarnings.length > 0) {
-        toast({
-          title: "Layout quality warning",
-          description: `${criticalWarnings.length} potential cropping issues detected. AI is learning...`,
-          variant: "default",
-        });
-      }
+    console.log('AI plan validation:', validation);
+    
+    const criticalCount = validation.warnings.filter(w => 
+      w.includes('CRITICAL') || w.includes('WARNING')
+    ).length;
+    
+    if (criticalCount > 3) {
+      console.warn(`⚠️ Detected ${criticalCount} critical issues. Applying auto-correction...`);
+      
+      toast({
+        title: "Optimizing layout quality",
+        description: `Correcting ${criticalCount} photo placements for better results...`,
+        variant: "default",
+      });
+      
+      // Apply auto-correction
+      aiPlan = autoCorrectLayoutPlan(aiPlan, photos, layoutsMetadata);
+      
+      // Re-validate after correction
+      const correctedValidation = validateLayoutPlan(aiPlan, photos, layoutsMetadata);
+      console.log('✅ After auto-correction:', correctedValidation);
     }
 
     // Filter duplicate image assignments (AI sometimes duplicates)

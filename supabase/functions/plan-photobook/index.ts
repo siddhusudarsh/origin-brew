@@ -142,7 +142,43 @@ CRITICAL ASPECT RATIO MATCHING RULES (Highest Priority):
    - Fill all frames in each chosen layout
    - Validate frame_number is between 1 and layout.frameCount
 
-Your response should use the create_photobook_plan function to return a complete, optimized plan that creates a visually stunning photobook with perfect photo-to-frame matching.`;
+MANDATORY VALIDATION BEFORE RETURNING PLAN (CRITICAL):
+You MUST validate every photo-to-frame assignment before returning your plan:
+
+Step 1: For each photo assignment, calculate:
+   - aspectDiff = |photo.aspectRatio - frame.aspect_ratio|
+
+Step 2: REJECT any assignment where:
+   ❌ Portrait photo (aspect < 0.85) goes into landscape frame (aspect > 1.2)
+   ❌ Landscape photo (aspect > 1.15) goes into portrait frame (aspect < 0.85)  
+   ❌ aspectDiff > 0.5 for any photo
+   ❌ Group photos (wide/landscape) in portrait frames
+
+Step 3: If a photo doesn't fit ANY frame in your chosen layout:
+   - CHANGE THE LAYOUT to find better frames
+   - DO NOT force the assignment
+
+Step 4: Self-check every page:
+   For each assignment ask yourself:
+   1. Is this photo portrait/landscape/square?
+   2. Is this frame portrait/landscape/square?
+   3. Do their orientations match?
+   4. Is aspectDiff < 0.5?
+   If ANY answer is NO → Reassign the photo immediately
+
+GROUP PHOTOS (HIGHEST PRIORITY RULE):
+- Group photos are typically wide/landscape (aspect ratio > 1.2)
+- NEVER EVER place group photos in portrait frames (aspect < 0.85)
+- ALWAYS use layouts with landscape/wide frames for group photos
+- Prioritize showing faces - avoid severe cropping
+- If in doubt, use wider frames for group shots
+
+QUALITY OVER COMPLETION:
+- It's better to leave a frame empty than to create a terrible mismatch
+- Never sacrifice visual quality to fill a specific layout
+- If no good match exists, use a different layout
+
+Your response should use the create_photobook_plan function to return a complete, validated, optimized plan that creates a visually stunning photobook with perfect photo-to-frame matching.`;
 
     // Call Lovable AI with tool calling for structured output
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
