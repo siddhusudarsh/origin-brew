@@ -2,42 +2,42 @@
   <defs>
     <!-- FRAME 1: Top Left -->
     <clipPath id="clip1">
-      <path d="M20 24 H170 V184 H20 Z"/>
+      <path d="M20 24 H172 V184 H20 Z"/>
     </clipPath>
-    <pattern id="img1" patternUnits="userSpaceOnUse" x="20" y="24" width="150" height="160">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="150" height="160" />
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="20" y="24" width="152" height="160">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="152" height="160" />
     </pattern>
 
     <!-- FRAME 2: Top Center -->
     <clipPath id="clip2">
-      <path d="M185 24 H335 V184 H185 Z"/>
+      <path d="M177 24 H327 V184 H177 Z"/>
     </clipPath>
-    <pattern id="img2" patternUnits="userSpaceOnUse" x="185" y="24" width="150" height="160">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="150" height="160" />
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="177" y="24" width="150" height="160">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="150" height="160" />
     </pattern>
 
     <!-- FRAME 3: Top Right -->
     <clipPath id="clip3">
-      <path d="M350 24 H480 V184 H350 Z"/>
+      <path d="M332 24 H480 V184 H332 Z"/>
     </clipPath>
-    <pattern id="img3" patternUnits="userSpaceOnUse" x="350" y="24" width="130" height="160">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="130" height="160" />
+    <pattern id="img3" patternUnits="userSpaceOnUse" x="332" y="24" width="148" height="160">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="148" height="160" />
     </pattern>
 
     <!-- FRAME 4: Bottom Left -->
     <clipPath id="clip4">
-      <path d="M20 199 H245 V407 H20 Z"/>
+      <path d="M20 189 H248 V407 H20 Z"/>
     </clipPath>
-    <pattern id="img4" patternUnits="userSpaceOnUse" x="20" y="199" width="225" height="208">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="225" height="208" />
+    <pattern id="img4" patternUnits="userSpaceOnUse" x="20" y="189" width="228" height="218">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="228" height="218" />
     </pattern>
 
     <!-- FRAME 5: Bottom Right -->
     <clipPath id="clip5">
-      <path d="M255 199 H480 V407 H255 Z"/>
+      <path d="M253 189 H480 V407 H253 Z"/>
     </clipPath>
-    <pattern id="img5" patternUnits="userSpaceOnUse" x="255" y="199" width="225" height="208">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="225" height="208" />
+    <pattern id="img5" patternUnits="userSpaceOnUse" x="253" y="189" width="227" height="218">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="227" height="218" />
     </pattern>
   </defs>
 
@@ -47,14 +47,14 @@
   <!-- Photo Frames -->
   <g>
     <!-- Frame 1 -->
-    <path d="M20 24 H170 V184 H20 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+    <path d="M20 24 H172 V184 H20 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
     <!-- Frame 2 -->
-    <path d="M185 24 H335 V184 H185 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+    <path d="M177 24 H327 V184 H177 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
     <!-- Frame 3 -->
-    <path d="M350 24 H480 V184 H350 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
+    <path d="M332 24 H480 V184 H332 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
     <!-- Frame 4 -->
-    <path d="M20 199 H245 V407 H20 Z" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
+    <path d="M20 189 H248 V407 H20 Z" fill="url(#img4)" clip-path="url(#clip4)" data-photo-frame="4" />
     <!-- Frame 5 -->
-    <path d="M255 199 H480 V407 H255 Z" fill="url(#img5)" clip-path="url(#clip5)" data-photo-frame="5" />
+    <path d="M253 189 H480 V407 H253 Z" fill="url(#img5)" clip-path="url(#clip5)" data-photo-frame="5" />
   </g>
 </svg>

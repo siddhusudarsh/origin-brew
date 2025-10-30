@@ -5,7 +5,7 @@
       <path d="M25 25 H475 V575 H25 Z"/>
     </clipPath>
     <pattern id="img1" patternUnits="userSpaceOnUse" x="25" y="25" width="450" height="550">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="450" height="550" />
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="450" height="550" />
     </pattern>
   </defs>
 

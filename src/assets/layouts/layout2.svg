@@ -5,15 +5,15 @@
       <path d="M115 24 H385 V294 H115 Z"/>
     </clipPath>
     <pattern id="img1" patternUnits="userSpaceOnUse" x="115" y="24" width="270" height="270">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="270" height="270" />
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="270" height="270" />
     </pattern>
 
     <!-- FRAME 2: Bottom Square -->
     <clipPath id="clip2">
-      <path d="M115 306 H385 V576 H115 Z"/>
+      <path d="M115 299 H385 V569 H115 Z"/>
     </clipPath>
-    <pattern id="img2" patternUnits="userSpaceOnUse" x="115" y="306" width="270" height="270">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="270" height="270" />
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="115" y="299" width="270" height="270">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="270" height="270" />
     </pattern>
   </defs>
 
@@ -25,6 +25,6 @@
     <!-- Frame 1 -->
     <path d="M115 24 H385 V294 H115 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
     <!-- Frame 2 -->
-    <path d="M115 306 H385 V576 H115 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+    <path d="M115 299 H385 V569 H115 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
   </g>
 </svg>

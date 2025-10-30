@@ -1,26 +1,16 @@
 import { Photo } from './types';
 
 /**
- * Determines optimal preserveAspectRatio based on photo-to-frame fit
- * Uses aggressive slice approach to fill frames edge-to-edge like professional layouts
+ * Determines optimal preserveAspectRatio to show full image without cropping
+ * Uses 'meet' to ensure entire photo is visible - perfect for photo albums
  */
 function getOptimalPreserveAspectRatio(
   photoAspect: number,
   frameAspect: number
 ): string {
-  const aspectDiff = Math.abs(photoAspect - frameAspect);
-  
-  // ALWAYS use slice for edge-to-edge fill - trust AI layout generator
-  // For portrait photos in landscape frames, prioritize showing faces
-  if (aspectDiff > 0.4) {
-    const portraitInLandscape = photoAspect < 1 && frameAspect > 1.2;
-    if (portraitInLandscape) {
-      return 'xMidYMin slice'; // Show top (faces)
-    }
-  }
-  
-  // Default: center and fill completely edge-to-edge
-  return 'xMidYMid slice';
+  // ALWAYS use 'meet' to show complete image without cropping
+  // This is essential for photo albums where we want to see the entire photo
+  return 'xMidYMid meet';
 }
 
 /**
@@ -151,9 +141,8 @@ export function replaceSVGImage(
     imageEl.setAttribute('href', newImageUrl);
     imageEl.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', newImageUrl);
     
-    // Apply edge-to-edge fill for consistency with automatic layout
-    // Use slice to match the professional appearance of screenshot 1
-    imageEl.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+    // Show full image without cropping for album viewing
+    imageEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
   }
   
   return new XMLSerializer().serializeToString(doc);

@@ -2,18 +2,18 @@
   <defs>
     <!-- FRAME 1: Left Portrait -->
     <clipPath id="clip1">
-      <path d="M20 80 H245 V520 H20 Z"/>
+      <path d="M20 80 H248 V520 H20 Z"/>
     </clipPath>
-    <pattern id="img1" patternUnits="userSpaceOnUse" x="20" y="80" width="225" height="440">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="225" height="440" />
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="20" y="80" width="228" height="440">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="228" height="440" />
     </pattern>
 
     <!-- FRAME 2: Right Portrait -->
     <clipPath id="clip2">
-      <path d="M255 80 H480 V520 H255 Z"/>
+      <path d="M253 80 H480 V520 H253 Z"/>
     </clipPath>
-    <pattern id="img2" patternUnits="userSpaceOnUse" x="255" y="80" width="225" height="440">
-      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="225" height="440" />
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="253" y="80" width="227" height="440">
+      <image href="" preserveAspectRatio="xMidYMid meet" x="0" y="0" width="227" height="440" />
     </pattern>
   </defs>
 
@@ -23,8 +23,8 @@
   <!-- Photo Frames -->
   <g>
     <!-- Frame 1 -->
-    <path d="M20 80 H245 V520 H20 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+    <path d="M20 80 H248 V520 H20 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
     <!-- Frame 2 -->
-    <path d="M255 80 H480 V520 H255 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+    <path d="M253 80 H480 V520 H253 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
   </g>
 </svg>
