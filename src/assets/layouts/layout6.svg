@@ -27,11 +27,6 @@
 
   <!-- Background color of the page -->
   <rect width="500" height="600" fill="#E0E0E0"/>
-  
-  <!-- White border areas -->
-  <rect x="10" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
-  <rect x="173" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
-  <rect x="336" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
 
   <!-- Photo Frames -->
   <g>

@@ -197,15 +197,17 @@ const Album = () => {
       {/* Top Bar */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate("/")}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Albums
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate("/")}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Albums
+            </Button>
+          </div>
           
           <div className="text-center">
             <h1 className="text-2xl font-semibold">{album.title}</h1>
@@ -214,7 +216,52 @@ const Album = () => {
             )}
           </div>
 
-          <div className="w-32" /> {/* Spacer for centering */}
+          <div className="flex items-center gap-2">
+            {!isEditMode && (
+              <>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleAddPhotos}
+                  disabled={isAddingPhotos}
+                  className="gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  {isAddingPhotos ? 'Adding...' : 'Add Photos'}
+                </Button>
+                
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setViewMode(prev => prev === 'single' ? 'book' : 'single')}
+                  className="gap-2"
+                >
+                  {viewMode === 'single' ? (
+                    <>
+                      <BookOpen className="h-4 w-4" />
+                      Book View
+                    </>
+                  ) : (
+                    <>
+                      <Grid3x3 className="h-4 w-4" />
+                      Single View
+                    </>
+                  )}
+                </Button>
+
+                {viewMode === 'book' && (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsEditMode(true)}
+                    className="gap-2"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -293,51 +340,6 @@ const Album = () => {
         className="hidden"
       />
 
-      {/* Floating Action Buttons */}
-      {!isEditMode && (
-        <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3">
-          {viewMode === 'book' && (
-            <Button
-              size="lg"
-              onClick={() => setIsEditMode(true)}
-              className="rounded-full shadow-lg"
-            >
-              <Pencil className="mr-2 h-5 w-5" />
-              Edit
-            </Button>
-          )}
-          
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={handleAddPhotos}
-            disabled={isAddingPhotos}
-            className="rounded-full shadow-lg"
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            {isAddingPhotos ? 'Adding...' : 'Add Photos'}
-          </Button>
-          
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={() => setViewMode(prev => prev === 'single' ? 'book' : 'single')}
-            className="rounded-full shadow-lg"
-          >
-            {viewMode === 'single' ? (
-              <>
-                <BookOpen className="mr-2 h-5 w-5" />
-                Book View
-              </>
-            ) : (
-              <>
-                <Grid3x3 className="mr-2 h-5 w-5" />
-                Single View
-              </>
-            )}
-          </Button>
-        </div>
-      )}
     </div>
   );
 };

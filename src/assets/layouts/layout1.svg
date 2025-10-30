@@ -19,10 +19,6 @@
 
   <!-- Background color of the page -->
   <rect width="500" height="600" fill="#E0E0E0"/>
-  
-  <!-- White border areas -->
-  <rect x="10" y="68" width="235" height="464" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
-  <rect x="255" y="68" width="235" height="464" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
 
   <!-- Photo Frames -->
   <g>
