@@ -34,24 +34,24 @@ function recommendPriorityLayouts(distribution: ReturnType<typeof analyzePhotoDi
   
   // Full-length portraits need tall frames
   if (distribution.fullLengthPortraits >= 3) {
-    recommendations.push('layout5.svg', 'layout10.svg', 'layout13.svg', 'layout14.svg');
+    recommendations.push('layout5.svg', 'layout13.svg', 'layout14.svg', 'layout18.svg');
   } else if (distribution.fullLengthPortraits >= 1) {
-    recommendations.push('layout5.svg');
+    recommendations.push('layout5.svg', 'layout14.svg');
   }
   
   // Regular portraits
   if (distribution.regularPortraits >= 5) {
-    recommendations.push('layout5.svg', 'layout8.svg', 'layout12.svg', 'layout18.svg');
+    recommendations.push('layout5.svg', 'layout8.svg', 'layout18.svg');
   }
   
   // Landscapes
   if (distribution.landscapes >= 5) {
-    recommendations.push('layout1.svg', 'layout4.svg', 'layout7.svg', 'layout9.svg', 'layout11.svg');
+    recommendations.push('layout7.svg', 'layout9.svg', 'layout10.svg', 'layout17.svg');
   }
   
   // Wide panoramics
   if (distribution.widePanoramics >= 2) {
-    recommendations.push('layout4.svg', 'layout9.svg', 'layout13.svg', 'layout17.svg');
+    recommendations.push('layout9.svg', 'layout10.svg', 'layout16.svg', 'layout17.svg');
   }
   
   return recommendations;
