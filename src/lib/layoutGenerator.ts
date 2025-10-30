@@ -380,6 +380,14 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
       const originalLayoutName = pagePlan.layout_to_use;
       // Determine frames needed for this page
       const framesNeeded = pagePlan.frames.length;
+      
+      // Skip pages with too many empty frames (less than 50% filled)
+      const layout = layoutsMetadata[originalLayoutName as keyof typeof layoutsMetadata];
+      if (layout && framesNeeded < layout.frameCount * 0.5) {
+        console.warn(`Skipping page ${pageIndex}: Only ${framesNeeded}/${layout.frameCount} frames filled`);
+        return;
+      }
+      
       // Rotate among layouts that have the same frame count to avoid repetition
       let chosenLayoutName = originalLayoutName;
       const candidates = layoutsByFrameCount[framesNeeded];
@@ -388,7 +396,6 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
         chosenLayoutName = candidates[idx % candidates.length];
         rotationIndex[framesNeeded] = idx + 1;
       }
-      const layout = layoutsMetadata[chosenLayoutName as keyof typeof layoutsMetadata];
       const templateSvg = layoutTemplates[chosenLayoutName];
 
       if (!templateSvg || !layout) {
@@ -413,14 +420,14 @@ export async function generateAlbumPagesWithAI(photos: Photo[]): Promise<AlbumPa
 
       // Generate SVG with images
       let svgContent = templateSvg;
-      svgContent = uniquifySVGIds(svgContent, `page${pageIndex}`);
+      svgContent = uniquifySVGIds(svgContent, `page${pages.length}`);
       svgContent = injectImagesIntoSVG(svgContent, photoAssignments, photosMap);
 
       const photoIds = validFrames.map(frame => frame.image_id);
       
       pages.push({
-        id: `page-${pageIndex}`,
-        pageNumber: pageIndex,
+        id: `page-${pages.length}`,
+        pageNumber: pages.length,
         svgContent,
         layoutName: chosenLayoutName,
         photoIds,

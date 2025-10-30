@@ -10,24 +10,17 @@ function getOptimalPreserveAspectRatio(
 ): string {
   const aspectDiff = Math.abs(photoAspect - frameAspect);
   
-  // Use slice for almost all cases - trust AI to match photos to frames correctly
-  // This ensures edge-to-edge fill like professional layouts
+  // For portrait photos, ALWAYS align to top to keep faces visible
+  if (photoAspect < 1) {
+    return 'xMidYMin slice';
+  }
+  
+  // Use slice for almost all cases
   if (aspectDiff < 0.8) {
-    // For moderate to severe aspect mismatches with orientation differences,
-    // prioritize showing faces (top portion for portraits in landscape frames)
-    if (aspectDiff > 0.4) {
-      const portraitInLandscape = photoAspect < 1 && frameAspect > 1.2;
-      if (portraitInLandscape) {
-        return 'xMidYMin slice'; // Show top (faces)
-      }
-    }
-    
-    // Default: center and fill completely
     return 'xMidYMid slice';
   }
   
-  // Extreme mismatch (aspectDiff >= 0.8) - this should rarely happen
-  // Use meet as last resort to avoid catastrophic cropping
+  // Only use meet for catastrophic mismatches (aspectDiff >= 0.8)
   return 'xMidYMid meet';
 }
 
