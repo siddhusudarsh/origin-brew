@@ -3,9 +3,9 @@
     "name": "layout0.svg",
     "frameCount": 1,
     "orientation": "portrait",
-    "description": "Single photo centered showcase with wide matting",
+    "description": "Single photo centered showcase with minimal matting",
     "frames": [
-      { "id": 1, "aspect_ratio": 0.79 }
+      { "id": 1, "aspect_ratio": 0.82 }
     ]
   },
   "layout1.svg": {
@@ -14,8 +14,8 @@
     "orientation": "portrait",
     "description": "Two photo side-by-side vertical layout",
     "frames": [
-      { "id": 1, "aspect_ratio": 0.75 },
-      { "id": 2, "aspect_ratio": 0.75 }
+      { "id": 1, "aspect_ratio": 0.51 },
+      { "id": 2, "aspect_ratio": 0.51 }
     ]
   },
   "layout2.svg": {
