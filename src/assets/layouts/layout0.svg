@@ -1,0 +1,23 @@
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
+  <defs>
+    <!-- FRAME 1: Large Centered Portrait -->
+    <clipPath id="clip1">
+      <path d="M60 60 H440 V540 H60 Z"/>
+    </clipPath>
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="60" y="60" width="380" height="480">
+      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="380" height="480" />
+    </pattern>
+  </defs>
+
+  <!-- Background color of the page -->
+  <rect width="500" height="600" fill="#E0E0E0"/>
+  
+  <!-- White border area -->
+  <rect x="50" y="50" width="400" height="500" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
+
+  <!-- Photo Frame -->
+  <g>
+    <!-- Frame 1 -->
+    <path d="M60 60 H440 V540 H60 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+  </g>
+</svg>

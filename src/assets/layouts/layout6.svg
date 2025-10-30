@@ -1,0 +1,45 @@
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none">
+  <defs>
+    <!-- FRAME 1: Left Tall Portrait -->
+    <clipPath id="clip1">
+      <path d="M20 82 H163 V518 H20 Z"/>
+    </clipPath>
+    <pattern id="img1" patternUnits="userSpaceOnUse" x="20" y="82" width="143" height="436">
+      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="143" height="436" />
+    </pattern>
+
+    <!-- FRAME 2: Center Tall Portrait -->
+    <clipPath id="clip2">
+      <path d="M179 82 H322 V518 H179 Z"/>
+    </clipPath>
+    <pattern id="img2" patternUnits="userSpaceOnUse" x="179" y="82" width="143" height="436">
+      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="143" height="436" />
+    </pattern>
+
+    <!-- FRAME 3: Right Tall Portrait -->
+    <clipPath id="clip3">
+      <path d="M338 82 H481 V518 H338 Z"/>
+    </clipPath>
+    <pattern id="img3" patternUnits="userSpaceOnUse" x="338" y="82" width="143" height="436">
+      <image href="" preserveAspectRatio="xMidYMid slice" x="0" y="0" width="143" height="436" />
+    </pattern>
+  </defs>
+
+  <!-- Background color of the page -->
+  <rect width="500" height="600" fill="#E0E0E0"/>
+  
+  <!-- White border areas -->
+  <rect x="10" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
+  <rect x="173" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
+  <rect x="336" y="70" width="153" height="456" fill="#FFFFFF" style="filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));"/>
+
+  <!-- Photo Frames -->
+  <g>
+    <!-- Frame 1 -->
+    <path d="M20 82 H163 V518 H20 Z" fill="url(#img1)" clip-path="url(#clip1)" data-photo-frame="1" />
+    <!-- Frame 2 -->
+    <path d="M179 82 H322 V518 H179 Z" fill="url(#img2)" clip-path="url(#clip2)" data-photo-frame="2" />
+    <!-- Frame 3 -->
+    <path d="M338 82 H481 V518 H338 Z" fill="url(#img3)" clip-path="url(#clip3)" data-photo-frame="3" />
+  </g>
+</svg>

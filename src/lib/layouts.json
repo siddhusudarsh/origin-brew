@@ -1,4 +1,44 @@
 {
+  "layout0.svg": {
+    "name": "layout0.svg",
+    "frameCount": 1,
+    "orientation": "portrait",
+    "description": "Single photo centered showcase with wide matting",
+    "frames": [
+      { "id": 1, "aspect_ratio": 0.79 }
+    ]
+  },
+  "layout1.svg": {
+    "name": "layout1.svg",
+    "frameCount": 2,
+    "orientation": "portrait",
+    "description": "Two photo side-by-side vertical layout",
+    "frames": [
+      { "id": 1, "aspect_ratio": 0.75 },
+      { "id": 2, "aspect_ratio": 0.75 }
+    ]
+  },
+  "layout2.svg": {
+    "name": "layout2.svg",
+    "frameCount": 2,
+    "orientation": "square",
+    "description": "Two photo vertical stack with square frames",
+    "frames": [
+      { "id": 1, "aspect_ratio": 1.0 },
+      { "id": 2, "aspect_ratio": 1.0 }
+    ]
+  },
+  "layout3.svg": {
+    "name": "layout3.svg",
+    "frameCount": 3,
+    "orientation": "mixed",
+    "description": "Three photo L-shaped with wide top",
+    "frames": [
+      { "id": 1, "aspect_ratio": 1.92 },
+      { "id": 2, "aspect_ratio": 0.75 },
+      { "id": 3, "aspect_ratio": 0.75 }
+    ]
+  },
   "layout5.svg": {
     "name": "layout5.svg",
     "frameCount": 3,
@@ -8,6 +48,17 @@
       { "id": 1, "aspect_ratio": 0.41 },
       { "id": 2, "aspect_ratio": 0.83 },
       { "id": 3, "aspect_ratio": 0.83 }
+    ]
+  },
+  "layout6.svg": {
+    "name": "layout6.svg",
+    "frameCount": 3,
+    "orientation": "portrait",
+    "description": "Three photo tall portrait triptych",
+    "frames": [
+      { "id": 1, "aspect_ratio": 0.33 },
+      { "id": 2, "aspect_ratio": 0.33 },
+      { "id": 3, "aspect_ratio": 0.33 }
     ]
   },
   "layout7.svg": {
@@ -58,6 +109,31 @@
       { "id": 3, "aspect_ratio": 2.13 },
       { "id": 4, "aspect_ratio": 1.63 },
       { "id": 5, "aspect_ratio": 1.63 }
+    ]
+  },
+  "layout11.svg": {
+    "name": "layout11.svg",
+    "frameCount": 4,
+    "orientation": "mixed",
+    "description": "Four photo asymmetric magazine layout",
+    "frames": [
+      { "id": 1, "aspect_ratio": 0.97 },
+      { "id": 2, "aspect_ratio": 1.0 },
+      { "id": 3, "aspect_ratio": 1.23 },
+      { "id": 4, "aspect_ratio": 1.90 }
+    ]
+  },
+  "layout12.svg": {
+    "name": "layout12.svg",
+    "frameCount": 5,
+    "orientation": "mixed",
+    "description": "Five photo filmstrip wrap layout",
+    "frames": [
+      { "id": 1, "aspect_ratio": 0.94 },
+      { "id": 2, "aspect_ratio": 0.94 },
+      { "id": 3, "aspect_ratio": 0.81 },
+      { "id": 4, "aspect_ratio": 1.08 },
+      { "id": 5, "aspect_ratio": 1.08 }
     ]
   },
   "layout13.svg": {

@@ -4,11 +4,18 @@ import { injectImagesIntoSVG, uniquifySVGIds } from './svgUtils';
 import layoutsMetadata from './layouts.json';
 
 // Import all layout SVG files
+import layout0 from '@/assets/layouts/layout0.svg?raw';
+import layout1 from '@/assets/layouts/layout1.svg?raw';
+import layout2 from '@/assets/layouts/layout2.svg?raw';
+import layout3 from '@/assets/layouts/layout3.svg?raw';
 import layout5 from '@/assets/layouts/layout5.svg?raw';
+import layout6 from '@/assets/layouts/layout6.svg?raw';
 import layout7 from '@/assets/layouts/layout7.svg?raw';
 import layout8 from '@/assets/layouts/layout8.svg?raw';
 import layout9 from '@/assets/layouts/layout9.svg?raw';
 import layout10 from '@/assets/layouts/layout10.svg?raw';
+import layout11 from '@/assets/layouts/layout11.svg?raw';
+import layout12 from '@/assets/layouts/layout12.svg?raw';
 import layout13 from '@/assets/layouts/layout13.svg?raw';
 import layout14 from '@/assets/layouts/layout14.svg?raw';
 import layout15 from '@/assets/layouts/layout15.svg?raw';
@@ -17,11 +24,18 @@ import layout17 from '@/assets/layouts/layout17.svg?raw';
 import layout18 from '@/assets/layouts/layout18.svg?raw';
 
 const layoutTemplates: Record<string, string> = {
+  'layout0.svg': layout0,
+  'layout1.svg': layout1,
+  'layout2.svg': layout2,
+  'layout3.svg': layout3,
   'layout5.svg': layout5,
+  'layout6.svg': layout6,
   'layout7.svg': layout7,
   'layout8.svg': layout8,
   'layout9.svg': layout9,
   'layout10.svg': layout10,
+  'layout11.svg': layout11,
+  'layout12.svg': layout12,
   'layout13.svg': layout13,
   'layout14.svg': layout14,
   'layout15.svg': layout15,
