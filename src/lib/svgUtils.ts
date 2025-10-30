@@ -12,7 +12,7 @@ function getOptimalPreserveAspectRatio(
   
   // Use slice for almost all cases - trust AI to match photos to frames correctly
   // This ensures edge-to-edge fill like professional layouts
-  if (aspectDiff < 0.6) {
+  if (aspectDiff < 0.8) {
     // For moderate to severe aspect mismatches with orientation differences,
     // prioritize showing faces (top portion for portraits in landscape frames)
     if (aspectDiff > 0.4) {
@@ -26,7 +26,7 @@ function getOptimalPreserveAspectRatio(
     return 'xMidYMid slice';
   }
   
-  // Extreme mismatch (aspectDiff >= 0.6) - this should rarely happen
+  // Extreme mismatch (aspectDiff >= 0.8) - this should rarely happen
   // Use meet as last resort to avoid catastrophic cropping
   return 'xMidYMid meet';
 }
@@ -159,10 +159,9 @@ export function replaceSVGImage(
     imageEl.setAttribute('href', newImageUrl);
     imageEl.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', newImageUrl);
     
-    // Apply smart aspect ratio handling
-    // Note: We don't have photo metadata here, so we use a balanced approach
-    // In the future, this could be enhanced to accept photo metadata
-    imageEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    // Apply edge-to-edge fill for consistency with automatic layout
+    // Use slice to match the professional appearance of screenshot 1
+    imageEl.setAttribute('preserveAspectRatio', 'xMidYMid slice');
   }
   
   return new XMLSerializer().serializeToString(doc);
