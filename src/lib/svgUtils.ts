@@ -10,36 +10,25 @@ function getOptimalPreserveAspectRatio(
 ): string {
   const aspectDiff = Math.abs(photoAspect - frameAspect);
   
-  // Good match (< 0.4 difference): use slice to fill frame completely
-  // Trust AI to place photos in appropriate frames, so this should look good
-  if (aspectDiff < 0.4) {
+  // Use slice for almost all cases - trust AI to match photos to frames correctly
+  // This ensures edge-to-edge fill like professional layouts
+  if (aspectDiff < 0.6) {
+    // For moderate to severe aspect mismatches with orientation differences,
+    // prioritize showing faces (top portion for portraits in landscape frames)
+    if (aspectDiff > 0.4) {
+      const portraitInLandscape = photoAspect < 1 && frameAspect > 1.2;
+      if (portraitInLandscape) {
+        return 'xMidYMin slice'; // Show top (faces)
+      }
+    }
+    
+    // Default: center and fill completely
     return 'xMidYMid slice';
   }
   
-  // Poor match (0.4-0.5): Still use slice but might have some crop
-  // Better to fill frame than show white borders
-  if (aspectDiff < 0.5) {
-    // For orientation matches (both portrait or both landscape), use slice
-    const bothPortrait = photoAspect < 1 && frameAspect < 1;
-    const bothLandscape = photoAspect > 1 && frameAspect > 1;
-    
-    if (bothPortrait || bothLandscape) {
-      return 'xMidYMid slice';
-    }
-    
-    // Orientation mismatch - use meet to avoid extreme cropping
-    return 'xMidYMid meet';
-  }
-  
-  // Severe mismatch - this shouldn't happen if AI is working correctly
-  // But if it does, prioritize showing important content
-  if (photoAspect < frameAspect) {
-    // Portrait in landscape frame - show top portion (faces) with center horizontal alignment
-    return 'xMidYMin slice';
-  } else {
-    // Landscape in portrait frame - center both ways and show full image
-    return 'xMidYMid meet';
-  }
+  // Extreme mismatch (aspectDiff >= 0.6) - this should rarely happen
+  // Use meet as last resort to avoid catastrophic cropping
+  return 'xMidYMid meet';
 }
 
 /**
