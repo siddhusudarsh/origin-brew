@@ -183,21 +183,6 @@ const Album = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {isEditMode && (
-        <EditMode
-          pages={pages}
-          photos={album?.photos || []}
-          currentPage={currentPage}
-          onPagesChange={setPages}
-          onCurrentPageChange={setCurrentPage}
-          onSave={handleSaveEdit}
-          onCancel={handleCancelEdit}
-          viewMode={viewMode}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        />
-      )}
-      
       {/* Top Bar */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
@@ -273,6 +258,18 @@ const Album = () => {
       <div className={`container mx-auto px-6 py-8 ${isEditMode ? 'pb-32' : ''}`}>
         {isEditMode ? (
           <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            <EditMode
+              pages={pages}
+              photos={album?.photos || []}
+              currentPage={currentPage}
+              onPagesChange={setPages}
+              onCurrentPageChange={setCurrentPage}
+              onSave={handleSaveEdit}
+              onCancel={handleCancelEdit}
+              viewMode={viewMode}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            />
             <ScrollArea className="h-[calc(100vh-220px)]">
               <div className="space-y-8 pb-8">
                 {Array.from({ length: Math.ceil(totalPages / 2) }, (_, i) => {

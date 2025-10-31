@@ -262,17 +262,15 @@ export default function EditMode({
         </div>
       </div>
 
-      {/* Drag and Drop Context */}
-      <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <SortableContext items={workingPages.map(p => p.id)} strategy={verticalListSortingStrategy}>
-          <PageThumbnailStrip
-            pages={workingPages}
-            currentPage={currentPage}
-            onPageSelect={onCurrentPageChange}
-            isEditMode={true}
-          />
-        </SortableContext>
-      </DragDropProvider>
+      {/* Page Thumbnails */}
+      <SortableContext items={workingPages.map(p => p.id)} strategy={verticalListSortingStrategy}>
+        <PageThumbnailStrip
+          pages={workingPages}
+          currentPage={currentPage}
+          onPageSelect={onCurrentPageChange}
+          isEditMode={true}
+        />
+      </SortableContext>
 
       {/* Layout Selector Modal */}
       <LayoutSelector
