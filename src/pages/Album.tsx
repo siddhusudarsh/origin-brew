@@ -11,6 +11,7 @@ import BookView from "@/components/album/BookView";
 import Header from "@/components/Header";
 import EditMode from "@/components/album/EditMode";
 import DragDropProvider from "@/components/album/DragDropProvider";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
@@ -72,23 +73,6 @@ const Album = () => {
   }
 
   const totalPages = pages.length;
-  const pagesPerView = viewMode === 'book' ? 2 : 1;
-  const maxPageIndex = Math.max(0, totalPages - pagesPerView);
-
-  const handlePrevious = () => {
-    setCurrentPage(prev => Math.max(0, prev - pagesPerView));
-  };
-
-  const handleNext = () => {
-    setCurrentPage(prev => Math.min(maxPageIndex, prev + pagesPerView));
-  };
-
-  const getCurrentPages = () => {
-    if (viewMode === 'book') {
-      return [pages[currentPage], pages[currentPage + 1]].filter(Boolean);
-    }
-    return [pages[currentPage]];
-  };
 
   const handleSaveEdit = (updatedPages: AlbumPage[]) => {
     setPages(updatedPages);
@@ -282,64 +266,66 @@ const Album = () => {
       <div className={`container mx-auto px-6 py-8 ${isEditMode ? 'pb-32' : ''}`}>
         {isEditMode ? (
           <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            {/* View Mode Content */}
-            <div className="mb-8">
-              {viewMode === 'single' ? (
-                <SinglePageView 
-                  pages={getCurrentPages()} 
-                  isEditMode={isEditMode}
-                  pageStartIndex={currentPage}
-                />
-              ) : (
-                <BookView 
-                  pages={getCurrentPages()} 
-                  isEditMode={isEditMode}
-                  pageStartIndex={currentPage}
-                />
-              )}
-            </div>
+            <ScrollArea className="h-[calc(100vh-220px)]">
+              <div className="space-y-8 pb-8">
+                {viewMode === 'single' ? (
+                  pages.map((page, index) => (
+                    <div key={index} className="scroll-snap-start">
+                      <SinglePageView 
+                        pages={[page]} 
+                        isEditMode={isEditMode}
+                        pageStartIndex={index}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  Array.from({ length: Math.ceil(totalPages / 2) }, (_, i) => {
+                    const leftPage = pages[i * 2];
+                    const rightPage = pages[i * 2 + 1];
+                    return (
+                      <div key={i} className="scroll-snap-start">
+                        <BookView 
+                          pages={[leftPage, rightPage].filter(Boolean)} 
+                          isEditMode={isEditMode}
+                          pageStartIndex={i * 2}
+                        />
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </ScrollArea>
           </DragDropProvider>
         ) : (
-          <div className="mb-8">
-            {viewMode === 'single' ? (
-              <SinglePageView 
-                pages={getCurrentPages()} 
-                isEditMode={isEditMode}
-                pageStartIndex={currentPage}
-              />
-            ) : (
-              <BookView 
-                pages={getCurrentPages()} 
-                isEditMode={isEditMode}
-                pageStartIndex={currentPage}
-              />
-            )}
-          </div>
-        )}
-
-        {/* Navigation */}
-        {!isEditMode && (
-          <div className="flex items-center justify-center gap-4">
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </Button>
-            
-            <span className="text-sm text-muted-foreground">
-              Page {currentPage + 1} {viewMode === 'book' && currentPage + 1 < totalPages && `- ${currentPage + 2}`} of {totalPages}
-            </span>
-            
-            <Button
-              variant="outline"
-              onClick={handleNext}
-              disabled={currentPage >= maxPageIndex}
-            >
-              Next
-            </Button>
-          </div>
+          <ScrollArea className="h-[calc(100vh-220px)]">
+            <div className="space-y-8 pb-8">
+              {viewMode === 'single' ? (
+                pages.map((page, index) => (
+                  <div key={index} className="scroll-snap-start">
+                    <SinglePageView 
+                      pages={[page]} 
+                      isEditMode={isEditMode}
+                      pageStartIndex={index}
+                    />
+                  </div>
+                ))
+              ) : (
+                Array.from({ length: Math.ceil(totalPages / 2) }, (_, i) => {
+                  const leftPage = pages[i * 2];
+                  const rightPage = pages[i * 2 + 1];
+                  return (
+                    <div key={i} className="scroll-snap-start">
+                      <BookView 
+                        pages={[leftPage, rightPage].filter(Boolean)} 
+                        isEditMode={isEditMode}
+                        pageStartIndex={i * 2}
+                      />
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </ScrollArea>
         )}
       </div>
 

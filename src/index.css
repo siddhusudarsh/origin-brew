@@ -102,4 +102,9 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  .scroll-snap-start {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
 }
