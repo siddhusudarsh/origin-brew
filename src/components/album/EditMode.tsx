@@ -4,18 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Save, X, Undo2, Redo2, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import PageThumbnailStrip from './PageThumbnailStrip';
-import DragDropProvider from './DragDropProvider';
 import { useEditHistory } from '@/hooks/useEditHistory';
 import {
   swapPhotos,
-  reorderPages,
   movePhotoWithLayoutAdjustment,
 } from '@/lib/editOperations';
 import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
 
 interface EditModeProps {
   pages: AlbumPage[];
@@ -81,24 +75,6 @@ export default function EditMode({
     parentOnDragEnd(event);
 
     if (!over) return;
-
-    // Handle page reordering
-    if (active.id.toString().startsWith('page-')) {
-      const oldIndex = workingPages.findIndex(p => p.id === active.id);
-      const newIndex = workingPages.findIndex(p => p.id === over.id);
-      
-      if (oldIndex !== newIndex) {
-        const newPages = reorderPages(workingPages, oldIndex, newIndex);
-        setWorkingPages(newPages);
-        onPagesChange(newPages);
-        addEntry({
-          operation: 'reorder_pages',
-          details: { from: oldIndex, to: newIndex },
-        });
-        toast.success('Pages reordered');
-      }
-      return;
-    }
 
     // Handle photo swapping/moving
     const sourceData = active.data.current;
@@ -186,14 +162,12 @@ export default function EditMode({
       </div>
 
       {/* Page Thumbnails */}
-      <SortableContext items={workingPages.map(p => p.id)} strategy={verticalListSortingStrategy}>
-        <PageThumbnailStrip
-          pages={workingPages}
-          currentPage={currentPage}
-          onPageSelect={onCurrentPageChange}
-          isEditMode={true}
-        />
-      </SortableContext>
+      <PageThumbnailStrip
+        pages={workingPages}
+        currentPage={currentPage}
+        onPageSelect={onCurrentPageChange}
+        isEditMode={true}
+      />
     </>
   );
 }
