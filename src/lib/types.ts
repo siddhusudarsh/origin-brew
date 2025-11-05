@@ -46,21 +46,6 @@ export interface LayoutMetadata {
   visualImpact?: "dramatic" | "balanced" | "subtle";
 }
 
-export interface AILayoutPlan {
-  pages: Array<{
-    layout_to_use: string;
-    frames: Array<{
-      frame_number: number;
-      image_id: string;
-    }>;
-  }>;
-}
-
-export interface PhotoMetadata {
-  id: string;
-  orientation: "landscape" | "portrait" | "square";
-  aspectRatio: number;
-}
 
 export interface EditHistoryEntry {
   id: string;
