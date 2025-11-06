@@ -218,7 +218,7 @@ export default function EditMode({
       </SortableContext>
 
       <ScrollArea className="h-[calc(100vh-220px)] scroll-area-viewport">
-        <div className="space-y-8 pb-8">
+        <div className="space-y-8 pb-8" data-testid="album-editor">
           {Array.from({ length: Math.ceil(totalPages / 2) }, (_, i) => {
             const leftPage = workingPages[i * 2];
             const rightPage = workingPages[i * 2 + 1];
