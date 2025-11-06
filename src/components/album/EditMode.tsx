@@ -1,25 +1,21 @@
-"use client";
+import { useState } from 'react';
+import { AlbumPage, Photo } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Save, X, Undo2, Redo2, Pencil } from 'lucide-react';
+import { toast } from 'sonner';
+import PageThumbnailStrip from './PageThumbnailStrip';
 
-import { useState } from "react";
-import type { AlbumPage, Photo } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import { Save, X, Undo2, Redo2, Pencil } from "lucide-react";
-import { toast } from "sonner";
-import PageThumbnailStrip from "./PageThumbnailStrip";
-import { useEditHistory } from "@/hooks/useEditHistory";
+import { useEditHistory } from '@/hooks/useEditHistory';
 import {
   swapPhotos,
   reorderPages,
   movePhotoWithLayoutAdjustment,
-} from "@/lib/editOperations";
-import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
+} from '@/lib/editOperations';
+import { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import DragDropProvider from "./DragDropProvider";
-import BookView from "./BookView";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@dnd-kit/sortable';
 
 interface EditModeProps {
   pages: AlbumPage[];
@@ -81,14 +77,13 @@ export default function EditMode({
     const sourceType = active.data.current?.type;
     const overType = over.data.current?.type;
 
+    const sourceType = active.data.current?.type
+    const overType = over.data.current?.type
+
     // Handle page reordering
     if (sourceType === "page" && overType === "page") {
-      const oldIndex = workingPages.findIndex(
-        (p) => `page-${p.id}` === active.id
-      );
-      const newIndex = workingPages.findIndex(
-        (p) => `page-${p.id}` === over.id
-      );
+      const oldIndex = workingPages.findIndex((p) => `page-${p.id}` === active.id)
+      const newIndex = workingPages.findIndex((p) => `page-${p.id}` === over.id)
 
       if (oldIndex !== newIndex) {
         const newPages = reorderPages(workingPages, oldIndex, newIndex);
@@ -104,145 +99,54 @@ export default function EditMode({
     }
 
     // Handle photo swapping/moving
-    const sourceData = active.data.current;
-    const targetData = over.data.current;
-
-    // Handle dropping a photo onto a page thumbnail
-    if (over.id.toString().startsWith("thumbnail-")) {
-      const targetPageIndex = over.data.current?.pageIndex;
-      if (targetPageIndex === undefined) return;
-
-      const targetPage = workingPages[targetPageIndex];
-      const firstEmptyFrameIndex = targetPage.photos.findIndex(
-        (p) => p === null
-      );
-
-      if (firstEmptyFrameIndex === -1) {
-        toast.error("This page is full.", {
-          description:
-            "Cannot move photo. The target page has no empty frames.",
-          duration: 3000,
-        });
-        return;
-      }
-
-      const newPages = movePhotoWithLayoutAdjustment(
-        workingPages,
-        sourceData.pageIndex,
-        sourceData.frameIndex,
-        targetPageIndex,
-        firstEmptyFrameIndex,
-        photos
-      );
-      setWorkingPages(newPages);
-      onPagesChange(newPages);
-      addEntry({
-        operation: "move_photo_to_page",
-        details: {
-          source: sourceData,
-          target: {
-            pageIndex: targetPageIndex,
-            frameIndex: firstEmptyFrameIndex,
-          },
-        },
-      });
-      toast.success("Photo moved to new page");
-      return;
-    }
-
-    console.log("[v0] Drag end - source:", sourceData, "target:", targetData);
+    const sourceData = active.data.current as { pageIndex: number; frameIndex: number } | undefined;
+    const targetData = over.data.current as { pageIndex: number; frameIndex?: number } | undefined;
 
     if (sourceData && targetData) {
+      const targetPageIndex = targetData.pageIndex;
+      const targetFrameIndex = typeof targetData.frameIndex === 'number' ? targetData.frameIndex : 0;
+
       // Check if it's a cross-page drag
-      if (sourceData.pageIndex !== targetData.pageIndex) {
-        const targetPage = workingPages[targetData.pageIndex];
-        const targetPagePhotoCount = targetPage.photos.filter(
-          (p) => p !== null
-        ).length;
-
-        console.log(
-          "[v0] Cross-page drag - target page has",
-          targetPagePhotoCount,
-          "photos"
-        );
-
-        if (targetData.photoUrl) {
-          // Target frame has a photo - just swap the photos, keep layouts unchanged
-          console.log(
-            "[v0] Target frame has photo - swapping without layout change"
-          );
-          const newPages = swapPhotos(
-            workingPages,
-            sourceData.pageIndex,
-            sourceData.frameIndex,
-            targetData.pageIndex,
-            targetData.frameIndex,
-            photos
-          );
-          setWorkingPages(newPages);
-          onPagesChange(newPages);
-          addEntry({
-            operation: "swap_photos",
-            details: {
-              source: sourceData,
-              target: targetData,
-              crossPage: true,
-            },
-          });
-          toast.success("Photos swapped");
-        } else {
-          if (targetPagePhotoCount >= 6) {
-            toast.error("Only 6 images per page are allowed", {
-              description:
-                "The target page is full. Please choose a different page.",
-              duration: 3000,
-            });
-            return; // Don't process the drop, image stays at source
-          }
-
-          console.log(
-            "[v0] Target frame is empty - moving with layout adjustment"
-          );
-          // Move photo with automatic layout adjustment
-          const newPages = movePhotoWithLayoutAdjustment(
-            workingPages,
-            sourceData.pageIndex,
-            sourceData.frameIndex,
-            targetData.pageIndex,
-            targetData.frameIndex,
-            photos
-          );
-          setWorkingPages(newPages);
-          onPagesChange(newPages);
-          addEntry({
-            operation: "move_photo_cross_page",
-            details: { source: sourceData, target: targetData },
-          });
-          toast.success("Photo moved and layouts adjusted");
-        }
-      } else {
-        // Same page swap
-        const newPages = swapPhotos(
+      if (sourceData.pageIndex !== targetPageIndex) {
+        // Move photo with automatic layout adjustment
+        const newPages = movePhotoWithLayoutAdjustment(
           workingPages,
           sourceData.pageIndex,
           sourceData.frameIndex,
-          targetData.pageIndex,
-          targetData.frameIndex,
+          targetPageIndex,
+          targetFrameIndex,
           photos
         );
         setWorkingPages(newPages);
         onPagesChange(newPages);
         addEntry({
-          operation: "swap_photos",
-          details: { source: sourceData, target: targetData },
+          operation: 'move_photo_cross_page',
+          details: { source: sourceData, target: { pageIndex: targetPageIndex, frameIndex: targetFrameIndex } },
         });
-        toast.success("Photos swapped");
+        toast.success('Photo moved and layouts adjusted');
+      } else if (typeof targetData.frameIndex === 'number') {
+        // Same page swap
+        const newPages = swapPhotos(
+          workingPages,
+          sourceData.pageIndex,
+          sourceData.frameIndex,
+          targetPageIndex,
+          targetFrameIndex,
+          photos
+        );
+        setWorkingPages(newPages);
+        onPagesChange(newPages);
+        addEntry({
+          operation: 'swap_photos',
+          details: { source: sourceData, target: { pageIndex: targetPageIndex, frameIndex: targetFrameIndex } },
+        });
+        toast.success('Photos swapped');
       }
     }
   };
 
-  const totalPages = workingPages.length;
-  const isDraggingPhoto = !!(draggedItem && "photoUrl" in draggedItem);
+  const totalPages = workingPages.length
+  const isDraggingPhoto = !!(draggedItem && "photoUrl" in draggedItem)
 
   const dragOverlay = draggedItem?.photoUrl ? (
     <div className="w-32 h-32 rounded-lg overflow-hidden shadow-2xl border-2 border-primary opacity-80">
